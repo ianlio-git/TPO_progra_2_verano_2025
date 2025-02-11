@@ -3,58 +3,80 @@ package org.example.util;
 import org.example.model.QueueOfStack;
 import org.example.model.StaticQueueOfStack;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class UtilQueueOfStack {
 
-    // Método para obtener el tamaño de la pila actual sin alterar su orden
-    private static int getStackSize(QueueOfStack qos) {
-        int count = 0;
-        List<Integer> tempList = new ArrayList<>(); // Lista para preservar el orden
-
-
-
-        // Restaurar la pila original en el mismo orden
-        for (int i = tempList.size() - 1; i >= 0; i--) {
-            qos.add(tempList.get(i));
-        }
-
-        return count;
-    }
-
-    // Método para copiar toda la cola de pilas, asegurando que el orden se mantenga
-    public static QueueOfStack copyQueueOfStack(QueueOfStack qos) {
-        int size = qos.getSize();
+    public static QueueOfStack copy(QueueOfStack qos) {
+        int size = qos.getSize(); //O(c)
         QueueOfStack copy = new StaticQueueOfStack(size);
         QueueOfStack temp = new StaticQueueOfStack(size);
 
-        while (!qos.queueIsEmpty()) {
-            temp.add(qos.getTop());
-            qos.removeTop();
+        while (!qos.queueIsEmpty()) { //O(n)
+            temp.add(qos.getTop()); //O(c)
+            qos.removeTop();//O(n)
         }
 
         // Restaurar la pila original y copiar en el nuevo objeto
-        while(!temp.queueIsEmpty()){
-            copy.add(temp.getTop());
-            qos.add(temp.getTop());
-            temp.removeTop();
+        while(!temp.queueIsEmpty()){ //O(n)
+            copy.add(temp.getTop());//O(c)
+            qos.add(temp.getTop());//O(c)
+            temp.removeTop();//O(n)
         }
 
-        return copy;
-    }
+        return copy; //O(c)
+    }  // Complejidad: O(n^2) debido a los dos ciclos anidados O(n) y las operaciones dentro de estos que son constantes.
 
-    // Método para imprimir toda la cola de pilas sin modificar la estructura original
-    public static void printQueueOfStack(QueueOfStack qos) {
-        QueueOfStack copy = copyQueueOfStack(qos);
-
-        System.out.println("Contenido de la cola de pilas:");
-        while (!copy.queueIsEmpty()) {
-            if(copy.stackIsFull()){
-                System.out.println(" ");
+    public static void print(QueueOfStack qos) {
+        QueueOfStack copy = copy(qos);
+        System.out.println("Contenido de la QueueOfStack:");
+        while (!copy.queueIsEmpty()) { //O(n)
+            for (int i = 0; i < qos.getSize(); i++) { //O(c)
+                System.out.print(copy.getTop() + " ");
+                copy.removeTop();
             }
-            System.out.print(copy.getTop()+" ");
-            copy.removeTop();
+            System.out.println();
         }
-    }
+
+    } // Complejidad: O(n^2)
+    public static int traza(QueueOfStack qos) {
+        int traza = 0; // O(c)
+        int currentRow = 0; // O(c)
+        int size = qos.getSize(); // O(c)
+        QueueOfStack copy = copy(qos); // O(n^2)
+
+        while (!copy.queueIsEmpty()) { // O(n)
+            for (int i = 0; i < currentRow; i++) { // O(n)
+                copy.removeTop(); // O(n)
+            }
+            traza += copy.getTop(); // O(c)
+            copy.removeTop(); // O(n)
+            if (currentRow < size - 1) { // O(c)
+                copy.removeQueue(); // O(n)
+            }
+            currentRow++; // O(c)
+        }
+
+        return traza; // O(c)
+    } // Complejidad: O(n^2)  debido a los dos ciclos anidados, uno de los cuales recorre hasta n elementos y el otro ejecuta operaciones como removeQueue()
+    public static QueueOfStack traspuesta(QueueOfStack qos) {
+        int size = qos.getSize();// O(c)
+        int currentRow = 0; // O(c)
+
+        QueueOfStack traspuesta = new StaticQueueOfStack(size);
+        QueueOfStack copy = copy(qos); //O(n^2)
+
+        while (currentRow < size) { // O(n)
+            for (int i = 0; i < currentRow; i++) { // O(n)
+                copy.removeTop(); // O(n)
+            }
+            traspuesta.add(copy.getTop()); // O(c)
+            copy.removeQueue(); // O(n)
+            if (copy.queueIsEmpty()){ // O(c)
+                copy = copy(qos);// O(n^2)
+                currentRow++; // O(c)
+            }
+
+        }
+        return traspuesta; // O(c)
+    } // Complejidad total O(n^2)
 }
