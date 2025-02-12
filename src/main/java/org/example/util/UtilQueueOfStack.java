@@ -17,11 +17,11 @@ public class UtilQueueOfStack {
         while (!qos.isQueueEmpty()) {
             int a = qos.pop();
             temp.add(a);
-            copy.add(a);
         }
         while (!temp.isQueueEmpty()) {
             int a = temp.pop();
             qos.add(a);
+            copy.add(a);
         }
 
         return copy;
@@ -38,30 +38,20 @@ public class UtilQueueOfStack {
 
     // Método para calcular la traza de la matriz representada por la QueueOfStack
     public static int traza(StaticQueueOfStack qos) {
+        StaticQueueOfStack copy = copy(qos);
         int traza = 0;
         int currentRow = 0;
-        int size = qos.getSize();
-        StaticQueueOfStack copy = copy(qos);
-
-        // Recorrer la diagonal de la matriz
         while (!copy.isQueueEmpty()) {
-            // Eliminar los elementos previos de las pilas de la cola
-            for (int i = 0; i < currentRow; i++) {
-                copy.pop();  // Eliminar el elemento de la cola de pilas
+            int lastPopped = 0;
+            for (int i = 0; i <= currentRow; i++) {
+                    lastPopped = copy.pop();
             }
-
-            // Sumar el elemento de la diagonal
-            traza += copy.pop();
-
-            // Eliminar la pila de la cola si está vacía
-            if (copy.isStackEmpty()) {
+            traza += lastPopped;
+            if (!copy.isQueueEmpty()) {
                 copy.remove();
+                currentRow++;
             }
-
-            // Avanzamos a la siguiente fila
-            currentRow++;
         }
-
         return traza;
     }
 
@@ -71,16 +61,17 @@ public class UtilQueueOfStack {
         int size = qos.getSize();
         int currentRow = 0;
 
-        StaticQueueOfStack traspuesta = new StaticQueueOfStack(size);
         StaticQueueOfStack copy = copy(qos);
+        StaticQueueOfStack transp = new StaticQueueOfStack(size);
 
         // Crear la traspuesta
         while (currentRow < size) {
-            for (int i = 0; i < currentRow; i++) {
-                copy.getFirst().remove();
+            int lastPopped = 0;
+            for (int i = 0; i <= currentRow; i++) {
+                lastPopped = copy.pop();
             }
-            traspuesta.add(copy.getFirst().getTop());
-            copy.getFirst().remove();
+
+            transp.add(lastPopped);
             copy.remove();
             if (copy.isQueueEmpty()) {
                 copy = copy(qos);
@@ -88,6 +79,6 @@ public class UtilQueueOfStack {
             }
         }
 
-        return traspuesta;
+        return transp;
     }
 }
