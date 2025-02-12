@@ -24,7 +24,7 @@ public class Main {
          * 1. Desarrolle una función que reciba una instancia de QueueOfStacks, y calcule su traza, utilizando una
          * estructura que represente una pila de colas.
          */
-        QueueOfStack qos = new StaticQueueOfStack(3);
+        StaticQueueOfStack qos = new StaticQueueOfStack(3);
         qos.add(1);
         qos.add(2);
         qos.add(3);
@@ -34,6 +34,7 @@ public class Main {
         qos.add(7);
         qos.add(8);
         qos.add(9);
+
         UtilQueueOfStack.print(qos);
         System.out.println("La traza de la QueueOfStack es: " + UtilQueueOfStack.traza(qos) );
         /**

@@ -1,82 +1,93 @@
 package org.example.util;
 
 import org.example.model.QueueOfStack;
+import org.example.model.Stack;
 import org.example.model.StaticQueueOfStack;
-
+import org.example.model.StaticStack;
 
 public class UtilQueueOfStack {
 
-    public static QueueOfStack copy(QueueOfStack qos) {
-        int size = qos.getSize(); //O(c)
-        QueueOfStack copy = new StaticQueueOfStack(size);
-        QueueOfStack temp = new StaticQueueOfStack(size);
+    // Método para copiar una QueueOfStack
+    public static StaticQueueOfStack copy(StaticQueueOfStack qos) {
+        int size = qos.getSize();
+        StaticQueueOfStack copy = new StaticQueueOfStack(size);
+        StaticQueueOfStack temp = new StaticQueueOfStack(size);
 
-        while (!qos.queueIsEmpty()) { //O(n)
-            temp.add(qos.getTop()); //O(c)
-            qos.removeTop();//O(n)
+        // Copiar cada pila de la QueueOfStack
+        while (!qos.isQueueEmpty()) {
+            int a = qos.pop();
+            temp.add(a);
+            copy.add(a);
+        }
+        while (!temp.isQueueEmpty()) {
+            int a = temp.pop();
+            qos.add(a);
         }
 
-        // Restaurar la pila original y copiar en el nuevo objeto
-        while(!temp.queueIsEmpty()){ //O(n)
-            copy.add(temp.getTop());//O(c)
-            qos.add(temp.getTop());//O(c)
-            temp.removeTop();//O(n)
-        }
+        return copy;
+    }
 
-        return copy; //O(c)
-    }  // Complejidad: O(n^2) debido a los dos ciclos anidados O(n) y las operaciones dentro de estos que son constantes.
-
-    public static void print(QueueOfStack qos) {
-        QueueOfStack copy = copy(qos);
+    // Método para imprimir el contenido de la QueueOfStack
+    public static void print(StaticQueueOfStack qos) {
+        StaticQueueOfStack copy = copy(qos);
         System.out.println("Contenido de la QueueOfStack:");
-        while (!copy.queueIsEmpty()) { //O(n)
-            for (int i = 0; i < qos.getSize(); i++) { //O(c)
-                System.out.print(copy.getTop() + " ");
-                copy.removeTop();
+        while (!copy.isQueueEmpty()) {
+            System.out.println(copy.pop());
+        }
+    }
+
+    // Método para calcular la traza de la matriz representada por la QueueOfStack
+    public static int traza(StaticQueueOfStack qos) {
+        int traza = 0;
+        int currentRow = 0;
+        int size = qos.getSize();
+        StaticQueueOfStack copy = copy(qos);
+
+        // Recorrer la diagonal de la matriz
+        while (!copy.isQueueEmpty()) {
+            // Eliminar los elementos previos de las pilas de la cola
+            for (int i = 0; i < currentRow; i++) {
+                copy.pop();  // Eliminar el elemento de la cola de pilas
             }
-            System.out.println();
+
+            // Sumar el elemento de la diagonal
+            traza += copy.pop();
+
+            // Eliminar la pila de la cola si está vacía
+            if (copy.isStackEmpty()) {
+                copy.remove();
+            }
+
+            // Avanzamos a la siguiente fila
+            currentRow++;
         }
 
-    } // Complejidad: O(n^2)
-    public static int traza(QueueOfStack qos) {
-        int traza = 0; // O(c)
-        int currentRow = 0; // O(c)
-        int size = qos.getSize(); // O(c)
-        QueueOfStack copy = copy(qos); // O(n^2)
+        return traza;
+    }
 
-        while (!copy.queueIsEmpty()) { // O(n)
-            for (int i = 0; i < currentRow; i++) { // O(n)
-                copy.removeTop(); // O(n)
+
+    // Método para calcular la traspuesta de la matriz representada por la QueueOfStack
+    public static StaticQueueOfStack traspuesta(StaticQueueOfStack qos) {
+        int size = qos.getSize();
+        int currentRow = 0;
+
+        StaticQueueOfStack traspuesta = new StaticQueueOfStack(size);
+        StaticQueueOfStack copy = copy(qos);
+
+        // Crear la traspuesta
+        while (currentRow < size) {
+            for (int i = 0; i < currentRow; i++) {
+                copy.getFirst().remove();
             }
-            traza += copy.getTop(); // O(c)
-            copy.removeTop(); // O(n)
-            if (currentRow < size - 1) { // O(c)
-                copy.removeQueue(); // O(n)
+            traspuesta.add(copy.getFirst().getTop());
+            copy.getFirst().remove();
+            copy.remove();
+            if (copy.isQueueEmpty()) {
+                copy = copy(qos);
+                currentRow++;
             }
-            currentRow++; // O(c)
         }
 
-        return traza; // O(c)
-    } // Complejidad: O(n^2)  debido a los dos ciclos anidados, uno de los cuales recorre hasta n elementos y el otro ejecuta operaciones como removeQueue()
-    public static QueueOfStack traspuesta(QueueOfStack qos) {
-        int size = qos.getSize();// O(c)
-        int currentRow = 0; // O(c)
-
-        QueueOfStack traspuesta = new StaticQueueOfStack(size);
-        QueueOfStack copy = copy(qos); //O(n^2)
-
-        while (currentRow < size) { // O(n)
-            for (int i = 0; i < currentRow; i++) { // O(n)
-                copy.removeTop(); // O(n)
-            }
-            traspuesta.add(copy.getTop()); // O(c)
-            copy.removeQueue(); // O(n)
-            if (copy.queueIsEmpty()){ // O(c)
-                copy = copy(qos);// O(n^2)
-                currentRow++; // O(c)
-            }
-
-        }
-        return traspuesta; // O(c)
-    } // Complejidad total O(n^2)
+        return traspuesta;
+    }
 }
