@@ -1,23 +1,25 @@
-package org.example.model;
+package org.example.ejercicio3.model;
 
-public class StaticQueue implements Queue {
+import org.example.ejercicio1.model.Stack;
+
+public class StaticStack implements Stack {
 
     private static final int MAX = 10000;
 
     private final int[] array;
     private int count;
 
-    public StaticQueue() {
+    public StaticStack() {
         this.array = new int[MAX];
         this.count = 0;
     }
 
     @Override
-    public int getFirst() {
+    public int getTop() {
         if(this.isEmpty()) {
-            throw new RuntimeException("No se puede obtener el primero de una cola vacia");
+            throw new RuntimeException("getTop() called on empty stack");
         }
-        return this.array[0];
+        return this.array[count - 1];
     }
 
     @Override
@@ -34,16 +36,13 @@ public class StaticQueue implements Queue {
     @Override
     public void remove() {
         if(this.isEmpty()) {
-            throw new RuntimeException("No se puede desacolar de una cola vacia");
-        }
-        for(int i = 0; i < this.count - 1; i++) {
-            this.array[i] = this.array[i+1];
+            throw new RuntimeException("remove() called on empty stack");
         }
         this.count--;
     }
 
-    public void f() {
-
+    public int getCount() {
+        return count;
     }
 
 }

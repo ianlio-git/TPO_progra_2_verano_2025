@@ -1,6 +1,6 @@
-package org.example.util;
+package org.example.ejercicio1.util;
 
-import org.example.model.*;
+import org.example.ejercicio1.model.*;
 
 public class UtilQueueOfStack {
 

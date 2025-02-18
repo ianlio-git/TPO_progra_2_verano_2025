@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.ejercicio3.model;
 
 public interface Stack {
 
