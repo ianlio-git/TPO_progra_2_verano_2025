@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example.ejercicio1.model;
 
 public class StaticSnailMatrix implements SnailMatrix {
     private int[][] matrix;

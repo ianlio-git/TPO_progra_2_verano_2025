@@ -1,11 +1,11 @@
-package org.example;
+package org.example.ejercicio1;
 
-import org.example.model.StaticQueueOfStack;
-import org.example.model.SnailMatrix;
-import org.example.model.StaticSnailMatrix;
-import org.example.util.UtilQueueOfStack;
+import org.example.ejercicio1.model.StaticQueueOfStack;
+import org.example.ejercicio1.model.SnailMatrix;
+import org.example.ejercicio1.model.StaticSnailMatrix;
+import org.example.ejercicio1.util.UtilQueueOfStack;
 
-public class Ejercicio1 {
+public class Main {
     public static void main(String[] args) {
         // ============================================================
         // Ejercicio 1.1: QueueOfStacks - Calcular la traza
