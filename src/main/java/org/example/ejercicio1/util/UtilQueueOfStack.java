@@ -101,18 +101,7 @@ public class UtilQueueOfStack {
         }
         return copy;
     }
-    /**
-     * Retorna el elemento del stack sin destruirlo.
-     */
-    public static int getElementAt(Stack s, int pos) {
-        StaticStack copy = UtilStack.copyStack(s);
-        int element = -1;
-        for (int i = 0; i <= pos; i++) {
-            element = copy.getTop();
-            copy.remove();
-        }
-        return element;
-    }
+
 
     /**
      * Calcula la traza (diagonal) de la matriz representada por la QueueOfStack.
@@ -120,15 +109,25 @@ public class UtilQueueOfStack {
      */
     public static int traza(StaticQueueOfStack qos) {
         int rows = size(qos); // O(n*m)
-        int trace = 0; // O(1)
+        int traza = 0;
         StaticQueueOfStack copy = copy(qos); // O(n*m)
-        for (int i = 0; i < rows; i++) { // n iteraciones → O(n)
-            Stack rowStack = copy.getFirst();
-            int diagElement = getElementAt(rowStack, i); // O(i) cada iteración, total O(n^2) en el peor caso
-            trace += diagElement; // O(1)
-            copy.remove(); // O(1)
+        StaticStackOfStack temp = new StaticStackOfStack();
+        while (!copy.isQueueEmpty()) {
+            StaticStack s = UtilStack.copyStack(copy.getFirst());
+            temp.add(s);
+            copy.remove();
         }
-        return trace; // O(1)
+        while (!temp.isEmpty()) {
+            int diagElement = 0;
+            for (int i = 0; i < rows; i++) { // n iteraciones → O(n)
+                diagElement = temp.getTop().getTop();
+                temp.getTop().remove();
+            }
+            traza += diagElement;
+            temp.remove();
+            rows--;
+        }
+        return traza; // O(1)
     }
 
     /**
