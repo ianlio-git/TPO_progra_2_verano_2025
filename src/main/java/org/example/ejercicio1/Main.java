@@ -7,40 +7,40 @@ import org.example.ejercicio1.util.UtilQueueOfStack;
 
 public class Main {
     public static void main(String[] args) {
+
         // ============================================================
         // Ejercicio 1.1: QueueOfStacks - Calcular la traza
         // ============================================================
         System.out.println("=== Ejercicio 1.1 - QueueOfStacks ===");
 
-        // Crear una matriz 3x3 en una QueueOfStacks (cada pila tiene 3 elementos)
-        StaticQueueOfStack qos = new StaticQueueOfStack(3);
-        // Agregar elementos para formar la matriz:
-        qos.add(1); qos.add(2); qos.add(3);
-        qos.add(4); qos.add(5); qos.add(6);
-        qos.add(7); qos.add(8); qos.add(9);
+        StaticQueueOfStack qos = UtilQueueOfStack.createSampleQueueOfStack();
 
         System.out.println("Matriz original:");
         UtilQueueOfStack.print(qos);
 
-        int traza = UtilQueueOfStack.traza(qos);   //   UtilQueueOfStack.traza() -> O(n^2)
+        // Complejidad: O(n^2)
+        int traza = UtilQueueOfStack.traza(qos);
         System.out.println("Traza de la matriz: " + traza);
-        // ------------------- Fin Ejercicio 1.1 ----------------------
+        System.out.println();
 
         // ============================================================
         // Ejercicio 1.2: QueueOfStacks - Calcular la traspuesta
         // ============================================================
         System.out.println("=== Ejercicio 1.2 - QueueOfStacks ===");
+
+
+        // Complejidad: O(n^3)
         StaticQueueOfStack traspuesta = UtilQueueOfStack.traspuesta(qos);
         System.out.println("Traspuesta de la matriz:");
-        UtilQueueOfStack.print(traspuesta);   //   UtilQueueOfStack.traspuesta() -> O(n^3)
-        // ------------------- Fin Ejercicio 1.2 ----------------------
+        UtilQueueOfStack.print(traspuesta);
 
         // ============================================================
         // Ejercicio 1.3: Matriz Caracol
         // ============================================================
         System.out.println("=== Ejercicio 1.3 - Matriz Caracol ===");
-        SnailMatrix snail = new StaticSnailMatrix(3);// -> O(n^2)
+
+        // Complejidad: O(n^2)
+        SnailMatrix snail = new StaticSnailMatrix(3);
         snail.print();
-        // ------------------- Fin Ejercicio 1.3 ----------------------
     }
 }

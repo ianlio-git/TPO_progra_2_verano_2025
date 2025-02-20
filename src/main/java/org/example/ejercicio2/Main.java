@@ -48,8 +48,8 @@ public class Main {
         // ===================== PriorityQueue Demo =====================
         System.out.println("==== PriorityQueue Demo ====");
 
-        // Crear una PriorityQueue generica de String
-        GenericPriorityQueue<String> pq = new GenericPriorityQueue<>();
+        // Crear una PriorityQueue generica de String con prioridades de tipo Integer.
+        GenericPriorityQueue<String, Integer> pq = new GenericPriorityQueue<>();
 
         // Agregar elementos con sus prioridades
         pq.add("Low", 1);
@@ -59,10 +59,9 @@ public class Main {
         pq.add("Very High", 15);
 
         System.out.println("PriorityQueue original:");
-        // Imprimir la cola con prioridad (este metodo es destructivo)
         PriorityQueueUtil.print(pq);
 
-        // Para demostrar la funcion copy, volvemos a agregar los elementos
+        // Para demostrar la función copy, volvemos a agregar los elementos
         pq.add("Low", 1);
         pq.add("Medium", 5);
         pq.add("High", 10);
@@ -70,7 +69,7 @@ public class Main {
         pq.add("Very High", 15);
 
         // Copiar la PriorityQueue
-        GenericPriorityQueue<String> pqCopy = PriorityQueueUtil.copy(pq);
+        GenericPriorityQueue<String, Integer> pqCopy = PriorityQueueUtil.copy(pq);
         System.out.println("Copia de la PriorityQueue:");
         PriorityQueueUtil.print(pqCopy);
 
