@@ -1,18 +1,14 @@
 package org.example.ejercicio3.util;
 
 import org.example.ejercicio3.model.Queue;
-import org.example.ejercicio3.model.QueueOfQueue;
 import org.example.ejercicio3.model.StaticQueue;
+import org.example.ejercicio3.model.QueueOfQueue;
 import org.example.ejercicio3.model.StaticQueueOfQueue;
 
+/**
+ * Utilidades para trabajar con QueueOfQueue sin destruir la estructura original.
+ */
 public class UtilQueueOfQueue {
-    /**
-     * Crea una instancia de StaticQueueOfQueue de muestra.
-     * Cada cola interna es una StaticQueue de enteros.
-     * Pre: -
-     * Post: Retorna una StaticQueueOfQueue con 3 filas, cada una con 3 elementos.
-     * @return una instancia de StaticQueueOfQueue de muestra.
-     */
     public static StaticQueueOfQueue createSampleQueueOfQueue() {
         StaticQueue q1 = new StaticQueue();
         q1.add(1);
@@ -37,39 +33,57 @@ public class UtilQueueOfQueue {
 
         return qoq;
     }
-    /**
-     * Imprime los elementos de una Queue (StaticQueue) de enteros.
-     * Este metodo es destructivo; la cola queda vacia al finalizar.
-     *
-     * Pre: La cola no es nula.
-     * Post: Se imprimen todos los elementos de la cola.
-     *
-     * @param q la cola a imprimir.
-     */
-    public static void printQueue(Queue q) {
-        System.out.print("");
+
+    public static StaticQueue copyQueue(StaticQueue q) {
+        StaticQueue copy = new StaticQueue();
+        StaticQueue temp = new StaticQueue();
         while (!q.isEmpty()) {
-            System.out.print(q.getFirst() + " ");
+            int elem = q.getFirst();
             q.remove();
+            temp.add(elem);
+            copy.add(elem);
         }
-        System.out.println("");
+        while (!temp.isEmpty()) {
+            int elem = temp.getFirst();
+            temp.remove();
+            q.add(elem);
+        }
+        return copy;
     }
 
-    /**
-     * Imprime los elementos de una QueueOfQueue.
-     * Por cada cola interna se invoca printQueue.
-     * Este metodo es destructivo; la QueueOfQueue queda vacia al finalizar.
-     *
-     * Pre: La QueueOfQueue no es nula.
-     * Post: Se imprimen todas las colas internas.
-     *
-     * @param qoq la QueueOfQueue a imprimir.
-     */
-    public static void printQueueOfQueue(QueueOfQueue qoq) {
+    public static StaticQueueOfQueue copy(StaticQueueOfQueue qoq) {
+        StaticQueueOfQueue copia = new StaticQueueOfQueue();
+        StaticQueueOfQueue temp = new StaticQueueOfQueue();
         while (!qoq.isEmpty()) {
-            Queue q = qoq.getFirst();
-            printQueue(q);
+            StaticQueue qCopy = copyQueue((StaticQueue) qoq.getFirst());
+            temp.add(qCopy);
+            copia.add(qCopy);
             qoq.remove();
+        }
+        while (!temp.isEmpty()) {
+            StaticQueue qCopy = (StaticQueue) temp.getFirst();
+            temp.remove();
+            qoq.add(qCopy);
+        }
+        return copia;
+    }
+
+
+    public static void printQueue(Queue q) {
+        StaticQueue copy = copyQueue((StaticQueue) q);
+        while (!copy.isEmpty()) {
+            System.out.print(copy.getFirst() + " ");
+            copy.remove();
+        }
+        System.out.println();
+    }
+
+    public static void printQueueOfQueue(QueueOfQueue qoq) {
+        StaticQueueOfQueue copy = copy((StaticQueueOfQueue) qoq);
+        while (!copy.isEmpty()) {
+            Queue q = copy.getFirst();
+            printQueue(q);
+            copy.remove();
         }
     }
 }

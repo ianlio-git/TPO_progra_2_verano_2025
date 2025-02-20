@@ -23,7 +23,7 @@ public interface QueueOfStack {
      *
      * @param a el elemento a agregar.
      */
-    void add(int a);
+    void add(Stack a);
 
     /**
      * Remueve la primera pila de la QueueOfStack.
@@ -43,4 +43,5 @@ public interface QueueOfStack {
      * @return true si la QueueOfStack esta vacia, false en caso contrario.
      */
     boolean isQueueEmpty();
+
 }

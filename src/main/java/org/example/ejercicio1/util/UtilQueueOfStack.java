@@ -2,101 +2,172 @@ package org.example.ejercicio1.util;
 
 import org.example.ejercicio1.model.*;
 
+/**
+ * Clase de utilidades para operar sobre una QueueOfStack (cola de pilas).
+ */
 public class UtilQueueOfStack {
+    private static final int MAX = 100000;
+
+    public UtilQueueOfStack() {
+    }
+
+    public static StaticQueueOfStack createSampleQueueOfStack() {
+        StaticStack s1 = new StaticStack();
+        s1.add(1);
+        s1.add(2);
+        s1.add(3);
+
+        StaticStack s2 = new StaticStack();
+        s2.add(4);
+        s2.add(5);
+        s2.add(6);
+
+        StaticStack s3 = new StaticStack();
+        s3.add(7);
+        s3.add(8);
+        s3.add(9);
+
+        StaticQueueOfStack qos = new StaticQueueOfStack(3);
+        qos.add(s1);
+        qos.add(s2);
+        qos.add(s3);
+
+        return qos;
+    }
 
     /**
-     * Metodo para copiar una QueueOfStack.
-     *
-     * Complejidad Total: O(n^2), donde n^2 es el numero total de elementos.
+     * Retorna el número de pilas (filas) en la QueueOfStack sin modificarla.
+     * Complejidad: O(n*m)
+     */
+    public static int size(StaticQueueOfStack qos) {
+        int rows = 0;
+        int columns = 0;
+        // Contar elementos de la primera pila.
+        StaticStack aux2 = UtilStack.copyStack(qos.getFirst());
+        while (!aux2.isEmpty()) {
+            aux2.remove();  // O(1) por iteración
+            rows++;
+        }
+        // Se recorre la primera pila (m elementos) → O(m)
+
+        // Contar la cantidad de pilas y verificar que cada una tenga la misma cantidad de elementos.
+        StaticQueueOfStack aux = new StaticQueueOfStack(MAX);
+        while (!qos.isQueueEmpty()){
+            StaticStack auxStack = UtilStack.copyStack(qos.getFirst());
+            int rows2 = 0;
+            while (!auxStack.isEmpty()) {
+                auxStack.remove();  // O(1)
+                rows2++;
+            }
+            if (rows2 != rows) {
+                throw new AssertionError("Queue of Stack no está lleno");
+            }
+            // Se actualiza rows (deben ser iguales en todas las pilas)
+            rows = rows2;
+            StaticStack s = UtilStack.copyStack(qos.getFirst());
+            aux.add(s);
+            qos.remove();
+            columns++;
+        }
+        // Bucle externo se ejecuta n veces (n = número de pilas), cada iteración O(m) → O(n*m)
+
+        // Restaurar la estructura original.
+        while (!aux.isQueueEmpty()){
+            qos.add(aux.getFirst());
+            aux.remove();
+        }
+        // Se recorre aux (n elementos) → O(n)
+
+        return columns;
+    }
+
+    /**
+     * Crea una copia de la QueueOfStack sin modificar la original.
      */
     public static StaticQueueOfStack copy(StaticQueueOfStack qos) {
-        int size = qos.getSize(); // O(c)
-        StaticQueueOfStack copy = new StaticQueueOfStack(size); // O(c)
-        StaticQueueOfStack temp = new StaticQueueOfStack(size); // O(c)
-
-        while (!qos.isQueueEmpty()) { // Se ejecuta hasta vaciar qos -> O(n^2)
-            int a = qos.pop(); // Cada pop: O(c)
-            temp.add(a);       // Cada add: O(c)
+        int n = size(qos); // O(n*m)
+        StaticQueueOfStack copy = new StaticQueueOfStack(n); // O(1)
+        StaticQueueOfStack temp = new StaticQueueOfStack(n); // O(1)
+        while (!qos.isQueueEmpty()) { // Se ejecuta n veces, cada iteración O(m) → O(n*m)
+            StaticStack s = UtilStack.copyStack(qos.getFirst());
+            temp.add(s);
+            copy.add(s);
+            qos.remove();
         }
-        while (!temp.isQueueEmpty()) { // Se ejecuta hasta vaciar temp -> O(n^2)
-            int a = temp.pop(); // O(c)
-            qos.add(a);         // O(c)
-            copy.add(a);        // O(c)
+        while (!temp.isQueueEmpty()) { // Se ejecuta n veces → O(n*m)
+            StaticStack s = UtilStack.copyStack(temp.getFirst());
+            qos.add(s);
+            temp.remove();
         }
-        return copy; // O(c)
+        return copy;
     }
-
     /**
-     * Metodo para imprimir el contenido de la QueueOfStack.
-     *
-     * Complejidad Total: O(n^2), debido a la llamada a copy() O(n^2) y al recorrido para imprimir los elementos (n^2).
+     * Retorna el elemento del stack sin destruirlo.
      */
-    public static void print(StaticQueueOfStack qos) {
-        StaticQueueOfStack temp = copy(qos); // copy: O(n^2)
-        System.out.println("Contenido de la QueueOfStack:"); // O(c)
-        while (!temp.isQueueEmpty()) { // Se recorre cada elemento -> O(n^2) en total
-            if (temp.getFirst().isEmpty()) { // O(c)
-                System.out.println("\t"); // O(c)
-            }
-            System.out.print(temp.pop() + " "); // Cada pop: O(c)
+    public static int getElementAt(Stack s, int pos) {
+        StaticStack copy = UtilStack.copyStack(s);
+        int element = -1;
+        for (int i = 0; i <= pos; i++) {
+            element = copy.getTop();
+            copy.remove();
         }
-        System.out.println("\t"); // O(c)
+        return element;
     }
 
     /**
-     * Metodo para calcular la traza de la matriz representada por la QueueOfStack.
-     *
-     * Complejidad Total: O(n^2)
+     * Calcula la traza (diagonal) de la matriz representada por la QueueOfStack.
+     * Complejidad: O (n^2)
      */
     public static int traza(StaticQueueOfStack qos) {
-        StaticQueueOfStack copy = copy(qos); // O(n^2)
-        int traza = 0; // O(c)
-        int currentRow = 0; // O(c)
-        while (!copy.isQueueEmpty()) { // Se ejecuta para cada fila -> O(n^2)
-            int lastPopped = 0; // O(c)
-            for (int i = 0; i <= currentRow; i++) { // Se realizan (currentRow + 1) pops; sumatoria total = O(n^2)
-                lastPopped = copy.pop(); // O(c) cada uno
-            }
-            traza += lastPopped; // O(c)
-            if (!copy.isQueueEmpty()) { // O(c)
-                copy.remove(); // O(c)
-                currentRow++; // O(c)
-            }
+        int rows = size(qos); // O(n*m)
+        int trace = 0; // O(1)
+        StaticQueueOfStack copy = copy(qos); // O(n*m)
+        for (int i = 0; i < rows; i++) { // n iteraciones → O(n)
+            Stack rowStack = copy.getFirst();
+            int diagElement = getElementAt(rowStack, i); // O(i) cada iteración, total O(n^2) en el peor caso
+            trace += diagElement; // O(1)
+            copy.remove(); // O(1)
         }
-        return traza; // O(c)
+        return trace; // O(1)
     }
 
     /**
-     * Metodo para calcular la traspuesta de la matriz representada por la QueueOfStack.
-     *
-     * Complejidad Total: O(n^3), ya que:
-     * - El bucle externo se ejecuta O(n) veces.
-     * - En cada iteracion se crea una copia fresca: O(n^2).
-     * - Ademas, se recorren todas las filas (hasta n iteraciones) en un bucle interno.
+     * Calcula la traspuesta de la matriz representada por la QueueOfStack.
+     * Complejidad:  O(n^3).
      */
     public static StaticQueueOfStack traspuesta(StaticQueueOfStack qos) {
-        int size = qos.getSize() - 1; // O(c)
-        StaticQueueOfStack transp = new StaticQueueOfStack(qos.getSize()); // O(c)
-
-        // Bucle externo: se ejecuta aproximadamente n veces (desde size = n-1 hasta 0) -> O(n)
-        while (size >= 0) {
-            // Crea una copia fresca de qos en cada iteracion -> O(n^2)
-            StaticQueueOfStack copy = copy(qos); // O(n^2)
-            // Bucle interno: recorre cada fila en la copia (hasta n filas) -> O(n) por copia, en total O(n^2) por iteracion externa
-            while (!copy.isQueueEmpty()) {
-                int a = 0; // O(c)
-                // Realiza (size + 1) extracciones sobre la primera fila -> O(n) en el peor caso
-                for (int i = 0; i <= size; i++) {
-                    a = copy.pop(); // O(c)
+        int rows = size(qos); // O(n*m)
+        StaticQueueOfStack qosTransp = new StaticQueueOfStack(rows);
+        for (int col = 0; col < rows; col++) { // n iteraciones → O(n)
+            StaticStack stackTransp = new StaticStack(); // O(1)
+            StaticQueueOfStack copy = copy(qos); // O(n*m)
+            while (!copy.isQueueEmpty()) { // n iteraciones → O(n) en el peor caso
+                Stack aux = copy.getFirst();
+                for (int i = 0; i < col; i++) { // Hasta col iteraciones → O(n) en promedio
+                    if (!aux.isEmpty()) {
+                        aux.remove(); // O(1)
+                    }
                 }
-                transp.add(a); // O(c)
-                // Remueve la fila si aun no esta vacia -> O(c)
-                if (!copy.isQueueEmpty()) {
-                    copy.remove(); // O(c)
-                }
+                int val = aux.isEmpty() ? 0 : aux.getTop(); // O(1)
+                stackTransp.add(val); // O(1)
+                copy.remove(); // O(1)
             }
-            size--; // O(c)
+            qosTransp.add(stackTransp); // O(1)
         }
-        return transp; // O(c)
+        return qosTransp; // O(1)
+    }
+
+    /**
+     * Imprime el contenido de la QueueOfStack sin destruir la estructura original.
+     */
+    public static void print(StaticQueueOfStack qos) {
+        StaticQueueOfStack temp = copy(qos); // O(n*m)
+        System.out.println("Contenido de la QueueOfStack:");
+        while (!temp.isQueueEmpty()) { // n iteraciones → O(n)
+            System.out.println("\t");
+            UtilStack.print(temp.getFirst()); // Se asume que UtilStack.print es O(m)
+            temp.remove(); // O(1)
+        }
+        System.out.println("\t"); // O(1)
     }
 }

@@ -8,11 +8,6 @@ public class UtilStack {
 
     /**
      * Crea una copia del stack generico sin modificar el stack original.
-     * Pre: El stack no es nulo.
-     * Post: Retorna un nuevo stack que contiene los mismos elementos en el mismo orden que el original.
-     * El stack original se restaura a su estado inicial.
-     * @param stack el stack a copiar.
-     * @return una copia del stack.
      */
     public static <T> GenericStack<T> copyStack(StackT<T> stack) {
         GenericStack<T> aux = new GenericStack<>();
@@ -38,9 +33,6 @@ public class UtilStack {
 
     /**
      * Imprime los elementos de un stack generico sin modificar su orden.
-     * Pre: El stack no es nulo.
-     * Post: Se muestran los elementos del stack y se restaura el stack a su estado original.
-     * @param stack el stack a imprimir.
      */
     public static <T> void print(StackT<T> stack) {
         // Crear una copia del stack sin modificar el original.
@@ -55,11 +47,6 @@ public class UtilStack {
 
     /**
      * Invierte los elementos de un stack generico usando una GenericQueue.
-     *
-     * Pre: El stack no es nulo.
-     * Post: Se invierte el orden de los elementos del stack original.
-     *       Se utiliza una GenericQueue para almacenar temporalmente los elementos.
-     * @param stack el stack a invertir.
      */
     public static <T> void invertirStackConQueue(StackT<T> stack) {
         // Crear una cola generica para almacenar temporalmente los elementos.

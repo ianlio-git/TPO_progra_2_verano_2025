@@ -3,7 +3,7 @@ package org.example.ejercicio2.model;
 /**
  * Interfaz que define la estructura de una cola con prioridad genérica.
  */
-public interface PriorityQueueT<T> {
+public interface PriorityQueueT<T, P> {
 
     /**
      * Retorna el primer elemento de la cola con prioridad sin eliminarlo.
@@ -23,7 +23,7 @@ public interface PriorityQueueT<T> {
      *
      * @return la prioridad del primer elemento.
      */
-    int getPriority();
+    P getPriority();
 
     /**
      * Indica si la cola con prioridad está vacía.
@@ -45,7 +45,7 @@ public interface PriorityQueueT<T> {
      * @param a el elemento a agregar.
      * @param priority la prioridad asociada al elemento.
      */
-    void add(T a, int priority);
+    void add(T a, P priority);
 
     /**
      * Remueve el primer elemento de la cola con prioridad.

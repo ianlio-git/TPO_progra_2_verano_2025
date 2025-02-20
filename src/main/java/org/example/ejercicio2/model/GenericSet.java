@@ -5,8 +5,6 @@ import java.util.Random;
 
 /**
  * Implementacion generica de la interfaz SetT.
- *
- * Se utiliza un array de Object para almacenar los elementos.
  */
 public class GenericSet<T> implements SetT<T> {
 
@@ -15,23 +13,14 @@ public class GenericSet<T> implements SetT<T> {
     private int count;
     private final Random random;
 
-    /**
-     * Constructor.
-     * Pre: -
-     * Post: Se crea un conjunto generico vacio con capacidad MAX.
-     */
+
     public GenericSet() {
         this.array = new Object[MAX];
         this.count = 0;
         this.random = new Random();
     }
 
-    /**
-     * Agrega un elemento al conjunto.
-     * Pre: No hay precondiciones.
-     * Post: Se agrega el elemento si no estaba presente; en caso contrario, no se hace nada.
-     * @param a el elemento a agregar.
-     */
+
     @Override
     public void add(T a) {
         // Verificar si el elemento ya existe (usando equals)
@@ -48,12 +37,7 @@ public class GenericSet<T> implements SetT<T> {
         count++;
     }
 
-    /**
-     * Remueve un elemento del conjunto.
-     * Pre: El elemento a remover debe existir en el conjunto.
-     * Post: Se elimina el elemento del conjunto.
-     * @param a el elemento a remover.
-     */
+
     @Override
     public void remove(T a) {
         for (int i = 0; i < count; i++) {
@@ -66,23 +50,13 @@ public class GenericSet<T> implements SetT<T> {
         }
     }
 
-    /**
-     * Indica si el conjunto esta vacio.
-     * Pre: No hay precondiciones.
-     * Post: Retorna true si el conjunto esta vacio, false en caso contrario.
-     * @return true si vacio, false si no.
-     */
+
     @Override
     public boolean isEmpty() {
         return this.count == 0;
     }
 
-    /**
-     * Retorna un elemento del conjunto de forma aleatoria.
-     * Pre: El conjunto no debe estar vacio.
-     * Post: Retorna un elemento del conjunto.
-     * @return un elemento del conjunto.
-     */
+
     @Override
     public T choose() {
         if (this.isEmpty()) {
@@ -95,13 +69,7 @@ public class GenericSet<T> implements SetT<T> {
         return (T) this.array[randomIndex];
     }
 
-    /**
-     * Sobrescribe el metodo equals para comparar conjuntos sin importar el orden.
-     * Pre: -
-     * Post: Retorna true si ambos conjuntos tienen los mismos elementos, false de lo contrario.
-     * @param o el objeto a comparar.
-     * @return true si los conjuntos son iguales, false en caso contrario.
-     */
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -127,12 +95,7 @@ public class GenericSet<T> implements SetT<T> {
         return true;
     }
 
-    /**
-     * Sobrescribe el metodo hashCode.
-     * Pre: -
-     * Post: Retorna el hash code del conjunto.
-     * @return el hash code del conjunto.
-     */
+
     @Override
     public int hashCode() {
         int hash = 7;
